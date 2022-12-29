@@ -38,18 +38,9 @@ QQ群交流群群：[259359511](https://qm.qq.com/cgi-bin/qm/qr?k=G9T2audQqbZBR_
 ## 悟空CRM目录结构
 
 ``` lua
-wk_crm
-├── admin         -- 系统管理模块和用户管理模块
-├── authorization -- 鉴权模块，目前仅用于登录鉴权，后期可能有更改
-├── bi            -- 商业智能模块
-├── core          -- 通用的代码和工具类
-├── crm           -- 客户管理模块
-├── examine       -- 审批模块
-├── gateway       -- 网关模块
-├── job           -- 定时任务模块
-├── oa            -- OA模块
-└── work          -- 项目管理模块
-└── hrm           -- 人力资源管理模块
+wk_modules
+├── module        -- 无代码模块
+├── gateway       -- 网关模块，暂时无用
 
 ```
 ### 核心功能模块
@@ -70,33 +61,28 @@ wk_crm
 
 ## 悟空无代码平台使用的主要技术栈
 
-| 名称                  | 版本                        | 说明 |
-|---------------------|---------------------------|----|
-| spring-cloud-alibaba| 2.2.1.RELEASE(Hoxton.SR3) |  核心框架  |
-| swagger             | 2.9.2                     |  接口文档  |
-| mybatis-plus        | 3.3.0                     |  ORM框架  |
-| sentinel            | 2.2.1.RELEASE             |  断路器以及限流  |
-| nacos               | 1.2.1.RELEASE             |  注册中心以及分布式配置管理  |
+|名称                 | 版本                     | 说明   |
+|---------------------|---------------------------|----  |
+| spring-cloud-alibaba| 2021.0.4                  |  核心框架  |
+| spring-boot         | 2.6.11                    |  spring版本  |
+| mybatis-plus        | 3.5.2                     |  ORM框架  |
+| nacos               | 2.1.0                     |  注册中心以及配置管理  |
 | seata               | 1.2.0                     |  分布式事务 |
-| elasticsearch       | 2.2.5.RELEASE(6.8.6)      |  搜索引擎中间件  |
-| jetcache            | 2.6.0                     |  分布式缓存框架  |
-| xxl-job             | 2.1.2                     |  分布式定时任务框架  |
-| gateway             | 2.2.2.RELEASE             |  微服务网关        |
-| feign               | 2.2.2.RELEASE             |  服务调用        |
+| elasticsearch       | 6.8.6                     |  搜索引擎中间件  |
+| jetcache            | 2.7.1                     |  分布式缓存框架  |
+| feign               | 3.1.4                     |  服务调用        |
 
 
 
 ## 使用说明
 
 ### 一、前置环境
-- Jdk1.8
-- Maven3.5.0+   
-- Mysql5.7.20 （<a href="https://gitee.com/wukongcrm/crm_pro/wikis/mysql配置说明" target="_blank">数据库安装注意事项</a>）
+- Jdk1.8^
+- Maven3.5.0^   
+- Mysql5.7^ （<a href="https://gitee.com/wukongcrm/crm_pro/wikis/mysql配置说明" target="_blank">数据库安装注意事项</a>）
 - Redis(版本不限)
 - Elasticsearch 6.8.6 （<a href="https://gitee.com/wukongcrm/crm_pro/wikis/elasticsearch配置说明" target="_blank">环境配置注意事项</a>）
-- Seata（1.2.0）（<a href="https://gitee.com/wukongcrm/crm_pro/wikis/seata" target="_blank">配置说明</a>）
-- Sentinel（1.7.2）（项目中sentinel使用8079端口）
-- Nacos（1.2.1)
+- Nacos（1.4^)
 
 ### 安装
 
