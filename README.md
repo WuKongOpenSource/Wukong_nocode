@@ -210,3 +210,9 @@ crm.upload.local.uploadPath      需要配置两个地址0为登录才可访问�
 ### 四、悟空无代码平台功能模块预览
 
 ![输入图片说明](image.png)
+![输入图片说明](image1.png)
+![输入图片说明](image2.png)
+![输入图片说明](image4.png)
+![输入图片说明](image5.png)
+![输入图片说明](image6.png)
+![输入图片说明](image7.png)
