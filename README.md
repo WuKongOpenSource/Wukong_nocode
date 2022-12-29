@@ -21,11 +21,11 @@ QQ群交流群群：[259359511](https://qm.qq.com/cgi-bin/qm/qr?k=G9T2audQqbZBR_
 
 扫码添加小悟官方客服微信，邀您加入千人微信交流群：
 
-<img src="https://images.gitee.com/uploads/images/2019/1231/115927_f9c580c8_345098.png" width="200">
+<img src="https://images.gitee.com/uploads/images/2019/1231/115927_f9c580c8_345098.png" width="120">
 
 关注悟空CRM公众号，了解更多悟空资讯
 
-<img src="https://images.gitee.com/uploads/images/2019/1202/135713_d3566c6a_345098.jpeg" width="200">
+<img src="https://images.gitee.com/uploads/images/2019/1202/135713_d3566c6a_345098.jpeg" width="120">
 
 
  :boom:  :boom:  :boom: 注：悟空无代码平台采用全新的前后端分离模式，本仓库代码中已集成前端vue打包后文件，  **可免去打包操作，无需运行前端** 
@@ -209,3 +209,4 @@ crm.upload.local.uploadPath      需要配置两个地址0为登录才可访问�
 ![输入图片说明](img/002.png)
 ![输入图片说明](img/006.png)
 ![输入图片说明](img/007.png)
+![输入图片说明](img/005.png)
