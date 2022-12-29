@@ -1,4 +1,4 @@
-# 悟空CRM-11.0
+# 悟空无代码平台
 
 
 体验地址：[https://www.72crm.com](http://www.72crm.com)
