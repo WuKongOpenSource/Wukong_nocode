@@ -66,7 +66,7 @@ wk_modules
 | elasticsearch       | 7.15.2                    |  搜索引擎中间件  |
 | jetcache            | 2.7.1                     |  分布式缓存框架  |
 | feign               | 3.1.4                     |  服务调用        |
-
+| rocketmq            | 4.9.4                     |  消息队列        |
 
 
 ## 使用说明
@@ -78,6 +78,7 @@ wk_modules
 - Redis(版本不限)
 - Elasticsearch 7.15.2
 - Nacos（1.4^)
+- RocketMq（4.9.4)
 
 ### 安装
 
@@ -106,8 +107,7 @@ wk_modules
 ```
 先启动所有前置环境
 在第八步解压的文件模块下通过执行`sh 72crm.sh start`（windows下直接运行72crm.bat）启动各个模块服务。
-其中项目基础模块：gateway，authorization，admin必须启动，其他模块可按需启动。
-启动完成后，在浏览器中访问：http://localhost:46923/即可登录系统
+启动完成后，在浏览器中访问：http://localhost:46923/即可访问系统
 
 ```
 
