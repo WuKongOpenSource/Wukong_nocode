@@ -1,0 +1,36 @@
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    database: 12
+    lettuce:
+      pool:
+        max-active: 300
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/wk_module?characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&serverTimezone=Asia/Shanghai&useAffectedRows=true&allowPublicKeyRetrieval=true
+    username: root
+    password: password
+  elasticsearch:
+    uris: 192.168.1.126:9200
+    username:
+    password:
+  jackson:
+    dateFormat: yyyy-MM-dd HH:mm:ss
+    timeZone: GMT+8
+rocketmq:
+  accessKey: accessKey
+  secretKey: secretKey
+  nameSrvAddr: 127.0.0.1:9876
+  topicOne: message
+  topicTwo: topB
+  groupId: GID_WK_MODULES
+wukong:
+  common:
+    upload:
+      type: local
+      endpoint:
+      accessKeyId:
+      accessKeySecret:
+      bucketName:
+      domain:

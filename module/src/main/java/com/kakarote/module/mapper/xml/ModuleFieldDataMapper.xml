@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kakarote.module.mapper.ModuleFieldDataMapper">
+
+    <select id="queryMultipleMainFieldValue" resultType="java.lang.String">
+        select `value`
+        from wk_module_field_data a
+        inner join wk_module b on a.module_id = b.module_id and a.field_id = b.main_field_id
+        where
+            b.is_active = true
+            and b.status = 1
+            and a.data_id in
+            <foreach item="item" index="index" collection="dataIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </select>
+</mapper>

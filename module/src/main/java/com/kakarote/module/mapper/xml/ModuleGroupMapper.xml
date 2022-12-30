@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kakarote.module.mapper.ModuleGroupMapper">
+
+
+    <resultMap id="getModuleGroupVO" type="com.kakarote.module.entity.VO.ModuleGroupVO">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="group_id" jdbcType="BIGINT" property="groupId"/>
+        <result column="application_id" jdbcType="BIGINT" property="applicationId"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="icon_color" jdbcType="VARCHAR" property="iconColor"/>
+        <result column="create_user_id" jdbcType="BIGINT" property="createUserId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <collection property="moduleIdList" javaType="java.util.List" ofType="java.lang.Long" >
+            <result column="module_id" />
+        </collection>
+    </resultMap>
+
+
+    <select id="getGroupList" resultMap="getModuleGroupVO">
+        select  b.module_id as module_id, a.id as id, a.id as group_id, a.application_id, a.group_name, a.`icon`, a.`icon_color`,a.create_user_id,a.update_time,a.create_time
+        from  wk_module_group a
+        left join wk_module_group_sort b on a.id = b.group_id and a.application_id = b.application_id and b.module_id is not null
+        where a.application_id=#{applicationId}
+
+    </select>
+
+
+</mapper>

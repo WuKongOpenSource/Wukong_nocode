@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kakarote.module.mapper.ModuleFieldDataCommonMapper">
+
+    <delete id="revertImport" parameterType="java.lang.String">
+        delete from wk_module_field_data
+        where `data_id`
+        in (
+          select a.`data_id`
+          from wk_module_field_data_common a
+          where a.batch_id = #{batchId}
+        )
+    </delete>
+
+
+</mapper>

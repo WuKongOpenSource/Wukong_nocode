@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kakarote.module.mapper.ModuleFieldSerialNumberMapper">
+
+    <select id="queryMaxNumber" resultType="java.lang.Integer">
+        SELECT max(field_number)
+        FROM wk_module_field_serial_number
+        WHERE  `module_id` = #{moduleId}
+        AND`field_id` = #{fieldId}
+        <if test="startDate != null">
+            and `create_time` BETWEEN #{startDate} AND #{endDate}
+        </if>
+    </select>
+
+
+</mapper>

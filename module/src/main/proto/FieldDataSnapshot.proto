@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_outer_classname = "FieldDataSnapshotBuf";
+message FieldDataSnapshot {
+  repeated Data        fieldDataList = 1;
+
+
+  message Data {
+    map<string,string> data = 1;
+  }
+}
