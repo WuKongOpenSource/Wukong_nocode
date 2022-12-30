@@ -63,7 +63,7 @@ wk_modules
 | mybatis-plus        | 3.5.2                     |  ORM框架  |
 | nacos               | 2.1.0                     |  注册中心以及配置管理  |
 | seata               | 1.2.0                     |  分布式事务 |
-| elasticsearch       | 6.8.6                     |  搜索引擎中间件  |
+| elasticsearch       | 7.15.2                    |  搜索引擎中间件  |
 | jetcache            | 2.7.1                     |  分布式缓存框架  |
 | feign               | 3.1.4                     |  服务调用        |
 
@@ -72,17 +72,17 @@ wk_modules
 ## 使用说明
 
 ### 一、前置环境
-- Jdk1.8^
-- Maven3.5.0^   
-- Mysql5.7^ （<a href="https://gitee.com/wukongcrm/crm_pro/wikis/mysql配置说明" target="_blank">数据库安装注意事项</a>）
+- Jdk1.8
+- Maven3.5^   
+- Mysql5.7^
 - Redis(版本不限)
-- Elasticsearch 6.8.6 （<a href="https://gitee.com/wukongcrm/crm_pro/wikis/elasticsearch配置说明" target="_blank">环境配置注意事项</a>）
+- Elasticsearch 7.15.2
 - Nacos（1.4^)
 
 ### 安装
 
 
-### 手动安装说明
+### 安装说明
      
 #### 1. 导入DB目录下数据库
 
@@ -119,7 +119,10 @@ wk_modules
 ```
 接口文档地址：http://localhost:46923/doc.html
 ```
-
+#### 2.docker镜像<br/>
+```
+敬请期待
+```
 ### 四、悟空无代码平台功能模块预览
 ![输入图片说明](img/001.png)
 ![输入图片说明](img/002.png)
