@@ -82,24 +82,7 @@ wk_modules
 
 ### 安装
 
-
-### 安装说明
-     
-#### 1. 导入DB目录下数据库
-
-#### 2.在项目根目录执行`mvn install`
-
-#### 3.在各个模块下resource目录配置数据库帐号信息以及redis帐号信息，MQ配置地址，elasticsearch配置地址`
-
-#### 4. 项目打包部署
-
-
-```
-·在项目根目录下执行 mvn clean -Dmaven.test.skip=true package
-·然后把对应模块下target文件夹下
-·${name}-${version}.zip/tar.gz上传到服务器,例：module-0.0.1.zip 并将压缩文件解压，检查对应配置文件。
-```
-
+安装说明：[安装说明](https://gitee.com/wukongcrm_admin/wukong-nocode/wikis/%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E)
 
 #### 5. 项目启动 <br/>
 
