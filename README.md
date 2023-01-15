@@ -84,16 +84,6 @@ wk_modules
 
 安装说明：[安装说明](https://gitee.com/wukongcrm_admin/wukong-nocode/wikis/%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E)
 
-#### 5. 项目启动 <br/>
-
-
-```
-先启动所有前置环境
-在第八步解压的文件模块下通过执行`sh 72crm.sh start`（windows下直接运行72crm.bat）启动各个模块服务。
-启动完成后，在浏览器中访问：http://localhost:46923/即可访问系统
-
-```
-
 
 ### 三、其他说明
 
