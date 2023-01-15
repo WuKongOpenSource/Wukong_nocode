@@ -32,7 +32,7 @@ QQ群交流群群：[259359511](https://qm.qq.com/cgi-bin/qm/qr?k=G9T2audQqbZBR_
 
 
 
-## 悟空CRM目录结构
+# 悟空CRM目录结构
 
 ``` lua
 wk_modules
@@ -40,7 +40,7 @@ wk_modules
 ├── common        -- 基础模块(暂时无用)
 ```
 
-### 核心功能模块
+# 核心功能模块
 
  **字段组件丰富：** 支持多行文本、网址、数字、下拉列表、百分比、时间、多选等丰富控件<br/>
  **布局样式多样：** 可调整表单内容大小与形式、平铺或下拉等格式，满足表单元素多样化。<br/>
@@ -54,7 +54,7 @@ wk_modules
  **多类型图标样式：** 数据表、汇总表、指标卡等数十种图标类型，涵盖广泛的应用场景。<br/>
 
 
-## 悟空无代码平台使用的主要技术栈
+# 悟空无代码平台使用的主要技术栈
 
 |名称                 | 版本                     | 说明   |
 |---------------------|---------------------------|----  |
@@ -69,7 +69,7 @@ wk_modules
 | rocketmq            | 4.9.4                     |  消息队列        |
 
 
-## 使用说明
+# 使用说明
 
 ### 一、前置环境
 - Jdk1.8
@@ -80,9 +80,122 @@ wk_modules
 - Nacos（1.4^)
 - RocketMq（4.9.4)
 
-### 安装
+# 安装
 
 安装说明：[安装说明](https://gitee.com/wukongcrm_admin/wukong-nocode/wikis/%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E)
+
+### 安装说明
+
+#### 一、依赖环境安装
+
+###### 1. 安装jdk
+```
+yum -y install java-1.8.0-openjdk-devel;
+```
+
+###### 2. 安装redis
+```
+yum -y install epel-release;
+yum -y install redis;
+chkconfig redis on;
+#-- 修改redis密码为123456
+yum -y install vim;
+vim /etc/redis.conf;
+#-- 在文件最下面追加一行
+requirepass 123456
+#-- 或者输入 / 搜索 # requirepass foobared
+#-- 将前面的#删除，将foobared改为123456
+#-- 修改完成之后 :wq 保存并退出,重启redis
+service redis restart;
+```
+
+###### 3.安装nacos [官方文档](https://nacos.io/zh-cn/docs/v2/quickstart/quick-start.html)
+```
+# 保存到/opt目录下
+wget https://github.com/alibaba/nacos/releases/download/2.0.3/nacos-server-2.0.3.zip -P /opt
+yum install unzip
+unzip /opt/nacos-server-2.0.3.zip -d /opt/nacos
+cd /opt/nacos/bin
+sh startup.sh -m standalone
+```
+
+###### 4.安装elasticsearch
+```
+-- 推荐使用docker安装
+yum install docker
+docker run -d --name es --restart=always -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+docker exec -it elastic /bin/bash 
+bin/elasticsearch-plugin install analysis-icu
+exit
+-- 重启es
+docker restart es
+```
+
+###### 5.安装rocketmq
+```
+cd /opt
+wget https://archive.apache.org/dist/rocketmq/4.9.2/rocketmq-all-4.9.2-bin-release.zip
+unzip rocketmq-all-4.9.2-bin-release.zip
+cd rocketmq-4.9.2/
+nohup sh bin/mqnamesrv >/dev/null 2>&1 &
+nohup sh bin/mqbroker -n localhost:9876 >/dev/null 2>&1 &
+```
+
+###### 6.安装mysql
+```
+wget https://repo.mysql.com//mysql80-community-release-el7-3.noarch.rpm
+yum -y install mysql80-community-release-el7-3.noarch.rpm
+yum -y install mysql-community-server --nogpgcheck
+sudo systemctl start mysqld.service;
+sudo systemctl enable mysqld.service;
+
+--查看安装的mysql默认密码
+grep "password" /var/log/mysqld.log
+--进入mysql 例：mysql -u root -p"GXOO%eiI/7o>"
+mysql - u root -p"此处为上一步的默认密码" 
+ 
+--修改mysql密码，如下图所示
+set global validate_password_policy=LOW;
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';
+
+--退出mysql
+exit
+    
+--修改mysql配置
+vim /etc/my.cnf;
+--输入 i 进入编辑模式，修改sql_mode设置，将下面sql_mode配置复制，到 [mysqld]下使用 shift+insert 粘贴
+sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION 
+--修改完毕，按esc按键，然后 :wq 保存并退出，重启mysql
+service mysqld restart;
+```
+
+#### 一、项目配置与启动
+
+###### 1. 导入DB目录下数据库
+
+###### 2.在项目根目录执行`mvn install`
+
+###### 3.在module模块下resource目录配置数据库帐号信息以及redis帐号信息，MQ配置地址，elasticsearch配置地址`
+
+###### 4. 访问[悟空ID](https://id.72crm.com/)获取账号
+###### 注册之后点击默认企业
+![默认企业](https://foruda.gitee.com/images/1673774011290861301/5bdc4983_8065912.png "img1.png")
+###### 点击无代码管理
+![无代码管理](https://foruda.gitee.com/images/1673774098067066785/3a905bfb_8065912.png "img2.png")
+##### 将App ID，accessKey，secretKey复制到 module\src\main\resources\application-dev.yml，分别对应appId，clientId，clientSecret 如下图所示
+![代码配置](https://foruda.gitee.com/images/1673774280708048007/6d5b6fc7_8065912.png "img4.png")
+将appId复制到module\src\main\webapp\public\APPLICATION_ID.txt内，替换里面内容
+###### 5. 项目打包部署
+```
+--项目打包
+mkdir /opt/package
+mvn clean -Dmaven.test.skip=true package
+cp module/target/module.zip /opt/package
+cd /opt/package
+unzip module.zip -d module
+cd module
+sh 72crm.sh start
+```
 
 
 ### 三、其他说明
