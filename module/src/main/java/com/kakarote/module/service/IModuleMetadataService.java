@@ -42,14 +42,6 @@ public interface IModuleMetadataService extends BaseService<ModuleMetadata> {
     void delete(Long applicationId);
 
     /**
-     * 查询应用配置
-     *
-     * @param applicationId
-     * @return
-     */
-    Map<String, Object> queryAppConfig(Long applicationId);
-
-    /**
      * 导入应用
      *
      * @param file

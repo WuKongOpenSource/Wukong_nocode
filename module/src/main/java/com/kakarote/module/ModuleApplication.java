@@ -10,7 +10,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @SpringBootApplication
 @MapperScan(basePackages = "com.kakarote.module.mapper")
-@EnableFeignClients(basePackages = {"com.kakarote.module"})
+@EnableFeignClients(basePackages = {"com.kakarote.module","com.kakarote.ids.provider"})
 public class ModuleApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ModuleApplication.class, args);

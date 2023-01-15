@@ -2,13 +2,13 @@ package com.kakarote.module.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.kakarote.common.entity.UserInfo;
 import com.kakarote.common.exception.BusinessException;
 import com.kakarote.common.result.SystemCodeEnum;
 import com.kakarote.common.servlet.ApplicationContextHolder;
@@ -35,8 +35,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 /**
@@ -116,49 +114,11 @@ public class ModuleMetadataServiceImpl extends BaseServiceImpl<ModuleMetadataMap
         List<Long> moduleIdList = moduleService.list(wrapper).stream().map(ModuleEntity::getModuleId).collect(Collectors.toList());
         // 删除应用下模块
         moduleService.deleteModule(moduleIdList);
-        // 删除应用下分组
-        ApplicationContextHolder.getBean(IModuleGroupService.class).deleteByApplicationId(applicationId);
         // 删除应用的角色
         ApplicationContextHolder.getBean(IModuleRoleService.class).lambdaUpdate().eq(ModuleRole::getApplicationId, applicationId).remove();
         ApplicationContextHolder.getBean(IModuleRoleUserService.class).lambdaUpdate().eq(ModuleRoleUser::getApplicationId, applicationId).remove();
         // 删除应用
         removeById(applicationId);
-    }
-
-    @Override
-    public Map<String, Object> queryAppConfig(Long applicationId) {
-        ModuleMetadata moduleMetadata = getById(applicationId);
-        List<ModuleGroup> groups = ApplicationContextHolder.getBean(IModuleGroupService.class).getByApplicationId(applicationId);
-        List<ModuleGroupSort> groupSorts = ApplicationContextHolder.getBean(IModuleGroupSortService.class).getByApplicationId(applicationId);
-        List<ModuleEntity> modules = moduleService.lambdaQuery()
-                .eq(ModuleEntity::getApplicationId, applicationId)
-                .eq(ModuleEntity::getIsActive, true)
-                .eq(ModuleEntity::getStatus, 1)
-                .orderByDesc(ModuleEntity::getCreateTime)
-                .list();
-        Map<String, Object> data = new HashMap<>(16);
-        List<Future<Map<String, Object>>> futureList = new ArrayList<>();
-        for (ModuleEntity module : modules) {
-            Future<Map<String, Object>> future = taskExecutor.submit(() -> {
-                Map<String, Object> moduleConfig = moduleService.queryModuleConfig(module.getModuleId());
-                return moduleConfig;
-            });
-            futureList.add(future);
-        }
-        List<Map<String, Object>> moduleDataList = futureList.stream().map(f -> {
-            try {
-                return f.get();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
-                throw new RuntimeException(e);
-            }
-        }).collect(Collectors.toList());
-        data.put("app", moduleMetadata);
-        data.put("groups", groups);
-        data.put("groupSorts", groupSorts);
-        data.put("modules", moduleDataList);
-        return data;
     }
 
     @Override
@@ -195,26 +155,11 @@ public class ModuleMetadataServiceImpl extends BaseServiceImpl<ModuleMetadataMap
         app.setCreateTime(DateUtil.date());
         app.setType(typeEnum.getCode());
         ApplicationContextHolder.getBean(IModuleMetadataService.class).save(app);
-        List<ModuleGroup> groups = JSON.parseArray(MapUtil.getStr(data, "groups"), ModuleGroup.class);
-        // 新旧模块ID对应关系 旧-新
-        Map<Long, Long> oldNewGroupIdMap = new HashMap<>(16);
-        if (CollUtil.isNotEmpty(groups)) {
-            for (ModuleGroup group : groups) {
-                Long newGroupId = BaseUtil.getNextId();
-                oldNewGroupIdMap.put(group.getId(), newGroupId);
-                group.setId(newGroupId);
-                group.setApplicationId(app.getApplicationId());
-                group.setCreateTime(LocalDateTimeUtil.now());
-                group.setUpdateTime(LocalDateTimeUtil.now());
-                group.setCreateUserId(UserUtil.getUserId());
-                group.setUpdateUserId(UserUtil.getUserId());
-            }
-            ApplicationContextHolder.getBean(IModuleGroupService.class).saveBatch(groups);
-        }
         // endregion
         List<Map<String, Object>> moduleDataList = MapUtil.get(data, "modules", List.class);
         // 新旧模块ID对应关系 旧-新
         Map<Long, Long> oldNewModuleIdMap = new HashMap<>(16);
+        List<ModuleEntity> moduleEntities = new ArrayList<>();
         // region 保存模块
         for (Map<String, Object> moduleData : moduleDataList) {
             ModuleEntity module = MapUtil.get(moduleData, "module", ModuleEntity.class);
@@ -231,42 +176,33 @@ public class ModuleMetadataServiceImpl extends BaseServiceImpl<ModuleMetadataMap
             module.setCreateUserId(UserUtil.getUserId());
             ApplicationContextHolder.getBean(IModuleService.class).save(module);
             ApplicationContextHolder.getBean(IModuleStatusService.class).updateStatus(newModuleId, true);
+            moduleEntities.add(module);
             // 初始化 ES
             moduleService.initES(module);
             // 自定义字段 ES索引处理
             List<ModuleField> fields = JSON.parseArray(MapUtil.getStr(moduleData, "fields"), ModuleField.class);
             moduleService.addESFields(fields, newModuleId);
         }
+        // 模块分组信息
+        List<ModuleGroup> groups = JSON.parseArray(MapUtil.getStr(data, "groups"), ModuleGroup.class);
         List<ModuleGroupSort> groupSorts = JSON.parseArray(MapUtil.getStr(data, "groupSorts"), ModuleGroupSort.class);
-        if (CollUtil.isNotEmpty(groupSorts)) {
-            List<ModuleGroupSort> moduleGroupSorts = new ArrayList<>();
-            for (ModuleGroupSort groupSort : groupSorts) {
-                groupSort.setId(null);
-                groupSort.setApplicationId(app.getApplicationId());
-                groupSort.setCreateTime(LocalDateTimeUtil.now());
-                groupSort.setUpdateTime(LocalDateTimeUtil.now());
-                groupSort.setCreateUserId(UserUtil.getUserId());
-                if (ObjectUtil.isNotNull(groupSort.getGroupId())) {
-                    groupSort.setGroupId(oldNewGroupIdMap.get(groupSort.getGroupId()));
-                }
-                if (ObjectUtil.isNotNull(groupSort.getModuleId())) {
-                    // 模块未发布，则跳过
-                    Long newModuleId = oldNewModuleIdMap.get(groupSort.getModuleId());
-                    if (ObjectUtil.isNull(newModuleId)) {
-                        continue;
-                    }
-                    groupSort.setModuleId(newModuleId);
-                }
-                moduleGroupSorts.add(groupSort);
-            }
-            ApplicationContextHolder.getBean(IModuleGroupSortService.class).saveBatch(moduleGroupSorts);
+        List<Router> routers = JSON.parseArray(MapUtil.getStr(data, "routers"), Router.class);
+        IRouterService routerService = ApplicationContextHolder.getBean(IRouterService.class);
+        if (CollUtil.isNotEmpty(routers)) {
+            routerService.transferRouter(routers, oldNewModuleIdMap, app.getApplicationId());
+        } else {
+            routers = new ArrayList<>();
+            routerService.groupTransferRouter(groups, groupSorts, oldNewModuleIdMap, moduleEntities, app.getApplicationId(), routers);
+        }
+        if (CollUtil.isNotEmpty(routers)) {
+            routerService.saveBatch(routers);
         }
         // endregion
-        Long userId = UserUtil.getUserId();
+        UserInfo user = UserUtil.getUser();
         for (Map<String, Object> moduleData : moduleDataList) {
             taskExecutor.submit(() -> {
                 try {
-                    UserUtil.setUser(userId);
+                    UserUtil.setUser(user);
                     moduleService.applyModule(moduleData, oldNewModuleIdMap);
                 } finally {
                     UserUtil.removeUser();

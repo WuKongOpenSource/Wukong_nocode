@@ -3,8 +3,10 @@ package com.kakarote.module.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.kakarote.common.entity.UserInfo;
 import com.kakarote.common.result.BasePage;
 import com.kakarote.common.utils.UserUtil;
+import com.kakarote.ids.provider.utils.UserCacheUtil;
 import com.kakarote.module.common.ModuleCacheUtil;
 import com.kakarote.module.common.ModuleFieldCacheUtil;
 import com.kakarote.module.constant.ModuleFieldEnum;
@@ -77,9 +79,10 @@ public class IModuleFieldFormulaProviderImpl implements ModulePageService, IModu
         List<ModuleFieldFormula> fieldFormulas = fieldFormulaService.getByModuleIdAndVersion(module.getModuleId(), module.getVersion());
         Map<Long, ModuleFieldFormula> fieldIdFormulaMap = fieldFormulas.stream().collect(Collectors.toMap(ModuleFieldFormula::getFieldId, Function.identity()));
 
+        UserInfo user = UserCacheUtil.getUserInfo(module.getCreateUserId());
         THREAD_POOL.execute(() -> {
             try {
-                UserUtil.setUser(module.getCreateUserId());
+                UserUtil.setUser(user);
                 AtomicInteger page = new AtomicInteger(1);
                 dealData(module.getModuleId(), module.getVersion(), page, allFields, formulaFields, fieldIdFormulaMap);
             } finally {

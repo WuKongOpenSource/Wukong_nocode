@@ -26,11 +26,15 @@ rocketmq:
   topicTwo: topB
   groupId: GID_WK_MODULES
 wukong:
+  ids:
+    auth:
+      appId:
+      clientId: 94a7808f-4d61-45ce-9ae1-de507b4d4bd2
+      clientSecret: b5d5415f-534d-4037-a7c6-f6a0d4cb39a5
+      requestUri: http://127.0.0.1:88/open/oauth2/token
+      redirectUri: http://127.0.0.1:44311/open/oauth2/token
   common:
     upload:
       type: local
-      endpoint:
-      accessKeyId:
-      accessKeySecret:
-      bucketName:
-      domain:
+      region: D:/wukong
+      domain: commonFile/download

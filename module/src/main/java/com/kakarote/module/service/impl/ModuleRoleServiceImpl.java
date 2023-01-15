@@ -141,11 +141,11 @@ public class ModuleRoleServiceImpl extends BaseServiceImpl<ModuleRoleMapper, Mod
         }
 
         List<Future<JSONObject>> futureList = new ArrayList<>();
-        Long userId = UserUtil.getUserId();
+        UserInfo user = UserUtil.getUser();
         for (ModuleMetadata metadata : metadataList) {
             Future<JSONObject> future = taskExecutor.submit(() -> {
                 try {
-                    UserUtil.setUser(userId);
+                    UserUtil.setUser(user);
                     JSONObject jsonObject = dealModuleAuth(metadata, moduleGroupByAppId, authModuleIdMap, authCategoryIdMap);
                     return jsonObject;
                 } catch (Exception e) {

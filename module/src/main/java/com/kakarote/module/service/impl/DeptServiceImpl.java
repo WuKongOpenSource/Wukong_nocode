@@ -1,7 +1,9 @@
 package com.kakarote.module.service.impl;
 
+import com.kakarote.common.entity.SimpleDept;
 import com.kakarote.common.result.Result;
-import com.kakarote.ids.provider.entity.SimpleDept;
+import com.kakarote.ids.provider.entity.BO.DeptQueryBO;
+import com.kakarote.ids.provider.entity.VO.IdsDeptVO;
 import com.kakarote.ids.provider.service.DeptService;
 import org.springframework.stereotype.Service;
 
@@ -33,5 +35,10 @@ public class DeptServiceImpl implements DeptService {
     public Result<String> queryDeptNameByDeptId(Long aLong) {
         return Result.ok("admin");
 
+    }
+
+    @Override
+    public Result<List<IdsDeptVO>> queryDeptTree(DeptQueryBO queryBO) {
+        return null;
     }
 }

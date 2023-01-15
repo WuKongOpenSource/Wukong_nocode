@@ -64,9 +64,6 @@ public class ModuleServiceImpl extends BaseServiceImpl<ModuleMapper, ModuleEntit
 	@Autowired
 	private IModuleStatusService statusService;
 
-    @Autowired
-    private IModuleGroupSortService groupSortService;
-
 	@Autowired
 	private UserService userService;
 
@@ -233,27 +230,6 @@ public class ModuleServiceImpl extends BaseServiceImpl<ModuleMapper, ModuleEntit
 			idVOMap.put(module.getModuleId(), listVOS);
 		}
 		List<ModuleListVO> vos = new ArrayList<>();
-
-		List<ModuleGroupSort> groupSorts = groupSortService.getByApplicationId(applicationId);
-		List<ModuleGroupSort> outList = groupSorts.stream().filter(g -> ObjectUtil.isNull(g.getModuleId()) || ObjectUtil.isNull(g.getGroupId()))
-				.sorted(Comparator.comparing(ModuleGroupSort::getSort)).collect(Collectors.toList());
-		for (ModuleGroupSort groupSort : outList) {
-			if (ObjectUtil.isNotNull(groupSort.getGroupId())) {
-				List<ModuleGroupSort> children = groupSorts.stream().filter(g -> ObjectUtil.isNotNull(g.getModuleId()) && ObjectUtil.equal(groupSort.getGroupId(), g.getGroupId()))
-						.sorted(Comparator.comparing(ModuleGroupSort::getSort)).collect(Collectors.toList());
-				for (ModuleGroupSort child : children) {
-					List<ModuleListVO> listVOS = idVOMap.remove(child.getModuleId());
-					if (CollUtil.isNotEmpty(listVOS)) {
-						vos.addAll(listVOS);
-					}
-				}
-			} else {
-				List<ModuleListVO> listVOS = idVOMap.remove(groupSort.getModuleId());
-				if (CollUtil.isNotEmpty(listVOS)) {
-					vos.addAll(listVOS);
-				}
-			}
-		}
 		for (Map.Entry<Long, List<ModuleListVO>> entry : idVOMap.entrySet()) {
 			vos.addAll(entry.getValue());
 		}
@@ -339,11 +315,6 @@ public class ModuleServiceImpl extends BaseServiceImpl<ModuleMapper, ModuleEntit
 		//删除场景
 		ApplicationContextHolder.getBean(IModuleSceneService.class)
 				.lambdaUpdate().in(ModuleScene::getModuleId, ids).remove();
-
-		// 删除模块分组关系
-		ApplicationContextHolder.getBean(IModuleGroupSortService.class)
-				.lambdaUpdate().in(ModuleGroupSort::getModuleId, ids).remove();
-
 		//删除数据关联字段
 		ApplicationContextHolder.getBean(IModuleFieldUnionService.class)
 				.lambdaUpdate().in(ModuleFieldUnion::getModuleId, ids).remove();

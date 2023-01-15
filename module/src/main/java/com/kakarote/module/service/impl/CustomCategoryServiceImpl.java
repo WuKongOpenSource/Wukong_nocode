@@ -6,10 +6,12 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.googlecode.aviator.runtime.type.AviatorBoolean;
+import com.kakarote.common.entity.UserInfo;
 import com.kakarote.common.result.BasePage;
 import com.kakarote.common.servlet.ApplicationContextHolder;
 import com.kakarote.common.servlet.BaseServiceImpl;
 import com.kakarote.common.utils.UserUtil;
+import com.kakarote.ids.provider.utils.UserCacheUtil;
 import com.kakarote.module.common.ModuleCacheUtil;
 import com.kakarote.module.common.expression.ExpressionUtil;
 import com.kakarote.module.entity.BO.ModuleFormulaBO;
@@ -73,9 +75,10 @@ public class CustomCategoryServiceImpl extends BaseServiceImpl<CustomCategoryMap
 
         List<ModuleField> moduleFields = ApplicationContextHolder.getBean(IModuleFieldService.class).getByModuleId(moduleId, null);
 
+        UserInfo user = UserCacheUtil.getUserInfo(module.getCreateUserId());
         THREAD_POOL.execute(() -> {
             try {
-                UserUtil.setUser(module.getCreateUserId());
+                UserUtil.setUser(user);
                 AtomicInteger page = new AtomicInteger(1);
                 setDataCategory(moduleId, page, categories, rulesGroupByCategoryId, moduleFields);
             } finally {

@@ -19,14 +19,12 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("wk_module_group_sort")
 @ApiModel(value = "ModuleGroupSort排序对象", description = "分组与模块的排序对象")
 public class ModuleGroupSort implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键")
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 

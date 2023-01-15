@@ -14,7 +14,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("wk_module_file")
-@ApiModel(value = "ModuleField对象", description = "自定义字段表")
+@ApiModel(value = "ModuleFile对象", description = "模块文件字段数据表")
 public class ModuleFile implements Serializable {
     private static final long serialVersionUID=1L;
 

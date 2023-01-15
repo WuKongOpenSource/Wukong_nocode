@@ -2,7 +2,13 @@ package com.kakarote.module.service.impl;
 
 import com.kakarote.common.constant.UserStatusEnum;
 import com.kakarote.common.entity.UserInfo;
+import com.kakarote.common.result.BasePage;
 import com.kakarote.common.result.Result;
+import com.kakarote.ids.provider.entity.BO.DeptQueryBO;
+import com.kakarote.ids.provider.entity.BO.UserQueryBO;
+import com.kakarote.ids.provider.entity.VO.IdsDeptVO;
+import com.kakarote.ids.provider.entity.VO.OrganizationVO;
+import com.kakarote.ids.provider.entity.VO.UserVO;
 import com.kakarote.ids.provider.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +27,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result<List<Long>> queryChildUserId(Long aLong) {
         return Result.ok(Arrays.asList(1L));
+    }
+
+    @Override
+    public Result<BasePage<UserVO>> queryUserList(UserQueryBO userQueryBO) {
+        return Result.ok(new BasePage<>());
     }
 
     @Override
@@ -81,6 +92,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result<List<Map<String, Object>>> listByRoleId(List<Long> list) {
+        return null;
+    }
+
+    @Override
+    public Result<UserVO> queryLoginUser() {
+        return null;
+    }
+
+    @Override
+    public Result<OrganizationVO> queryOrganizationInfo() {
         return null;
     }
 }

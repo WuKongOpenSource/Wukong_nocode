@@ -17,13 +17,11 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("wk_module_group")
 @ApiModel(value = "ModuleGroup对象", description = "模块的分组的对象")
 public class ModuleGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     @ApiModelProperty(value = "应用id")
