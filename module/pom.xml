@@ -46,7 +46,7 @@
 			<artifactId>wk_common_file</artifactId>
 			<version>1.0.5</version>
             <scope>system</scope>
-            <systemPath>${basedir}/src/main/resources/lib/wk_common_file-1.0.6.jar</systemPath>
+            <systemPath>${basedir}/src/main/resources/lib/wk_common_file-1.0.8.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
